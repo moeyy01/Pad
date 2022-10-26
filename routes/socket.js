@@ -2,16 +2,16 @@ var app = require('express')
 var shortid = require('shortid')
 var router = app.Router()
 
-module.exports = function (io) {
-  var welcomeMessage = 'Pad created! Share the URL with a friend to edit text in real-time.'
+module.exports = function(io) {
+  var welcomeMessage = '文本已创建，与朋友分享 URL 以实时编辑文本。'
   var pages = new Map() // Stores Pad data
 
   // Handle WebSocket connections
-  io.on('connection', function (socket) {
+  io.on('connection', function(socket) {
     console.log('A user connected')
 
     // Handle sync request
-    socket.on('sync', function (data) {
+    socket.on('sync', function(data) {
       if (pages.has(data.path)) {
         // Page exists, notify with pad data
         notify(socket, pages.get(data.path), data.path)
@@ -27,7 +27,7 @@ module.exports = function (io) {
     })
 
     // Handle incoming data from user
-    socket.on('data', function (data) {
+    socket.on('data', function(data) {
       // Update pad data in memory
       pages.set(data.path, data.text)
       var curr = pages.get(data.path)
@@ -38,17 +38,17 @@ module.exports = function (io) {
   })
 
   // Send update to client
-  function notify (socket, c, p) {
+  function notify(socket, c, p) {
     socket.emit('notify', { content: c, path: p })
   }
 
   // Send update to all clients
-  function notifyAll (socket, c, p) {
+  function notifyAll(socket, c, p) {
     socket.broadcast.emit('notify', { content: c, path: p })
   }
 
   // Clean up memory if Map gets too full
-  function clearUpMemory () {
+  function clearUpMemory() {
     for (var [key, value] of pages) {
       if (value == '') {
         pages.delete(key)
@@ -57,17 +57,17 @@ module.exports = function (io) {
   }
 
   /* GET pad by unique id */
-  router.get('/:id', function (req, res, next) {
-    res.render('pad', { title: 'Pad', temp: welcomeMessage })
+  router.get('/:id', function(req, res, next) {
+    res.render('pad', { title: 'pad', temp: welcomeMessage })
   })
 
   /* Handle POST, redirect to GET pad by unique id */
-  router.post('/:id', function (req, res, next) {
-    res.render('pad', { title: 'Pad', temp: welcomeMessage })
+  router.post('/:id', function(req, res, next) {
+    res.render('pad', { title: 'pad', temp: welcomeMessage })
   })
 
   /* Handle index requests for /Pad */
-  router.get('/', function (req, res, next) {
+  router.get('/', function(req, res, next) {
     var sid = shortid.generate()
     res.render('index', { title: 'Welcome to Pad', buttonLbl: 'Get started', id: sid })
   })
