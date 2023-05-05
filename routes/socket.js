@@ -57,17 +57,17 @@ module.exports = function(io) {
   }
 
   /* GET pad by unique id */
-  router.get('./:id', function(req, res, next) {
+  router.get('/:id', function(req, res, next) {
     res.render('pad', { title: 'pad', temp: welcomeMessage })
   })
 
   /* Handle POST, redirect to GET pad by unique id */
-  router.post('./:id', function(req, res, next) {
+  router.post('/:id', function(req, res, next) {
     res.render('pad', { title: 'pad', temp: welcomeMessage })
   })
 
   /* Handle index requests for /Pad */
-  router.get('./', function(req, res, next) {
+  router.get('/', function(req, res, next) {
     var sid = shortid.generate()
     res.render('index', { title: 'Welcome to Pad', buttonLbl: 'Get started', id: sid })
   })
