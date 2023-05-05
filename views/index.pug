@@ -22,7 +22,7 @@ html
         h1= title
       p.lead
         | 在线、协作、实时记事本。 
-      form(action="/pad/" + id, method="POST")
+      form(action="./" + id, method="POST")
         button(type="submit", class="btn btn-primary btn-lg")= buttonLbl
 
     //-
